@@ -29,7 +29,7 @@ export default function Navbar({ isAuthenticated, role }: { isAuthenticated: boo
                     {isAuthenticated && role && (
                         <>
                             <Link href={`/dashboard/${role.toLowerCase()}`}>
-                                <Button size={'sm'} variant={'link'} onClick={() => { logoutAction() }}>
+                                <Button size={'sm'} variant={'link'}>
                                     Dashboard
                                 </Button>
                             </Link>

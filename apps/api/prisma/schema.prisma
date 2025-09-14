@@ -1,0 +1,85 @@
+// Prisma schema for Sibyl mini marketplace
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CLIENT
+  LAWYER
+}
+
+enum CaseStatus {
+  open
+  engaged
+  closed
+  cancelled
+}
+
+enum QuoteStatus {
+  proposed
+  accepted
+  rejected
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  role          UserRole
+  name          String?
+  jurisdiction  String?
+  barNumber     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  cases   Case[]  @relation("ClientCases")
+  quotes  Quote[]
+}
+
+model Case {
+  id          String      @id @default(cuid())
+  title       String
+  category    String
+  description String
+  status      CaseStatus  @default(open)
+  client      User        @relation("ClientCases", fields: [clientId], references: [id])
+  clientId    String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  files  CaseFile[]
+  quotes Quote[]
+}
+
+model CaseFile {
+  id           String   @id @default(cuid())
+  case         Case     @relation(fields: [caseId], references: [id])
+  caseId       String
+  key          String
+  mime         String
+  originalName String
+  size         Int
+  createdAt    DateTime @default(now())
+}
+
+model Quote {
+  id           String      @id @default(cuid())
+  case         Case        @relation(fields: [caseId], references: [id])
+  caseId       String
+  lawyer       User        @relation(fields: [lawyerId], references: [id])
+  lawyerId     String
+  amount       Int
+  expectedDays Int
+  note         String?
+  status       QuoteStatus @default(proposed)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@unique([caseId, lawyerId], name: "caseId_lawyerId")
+}

@@ -6,6 +6,8 @@ This is a monorepo skeleton for the Sibyl technical test.
 - Backend: Express (TypeScript), Prisma ORM, JWT auth, RBAC, Zod validation, Multer uploads, Supabase Storage, Stripe (test), pagination utilities
 - Shared: Types/enums/Zod schemas shared between FE/BE
 
+[API Documentation](./apps/api/README.md)
+
 ## Structure
 
 - `apps/api` — Express API server

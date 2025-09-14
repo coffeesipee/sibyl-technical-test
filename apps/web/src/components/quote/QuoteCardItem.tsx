@@ -5,6 +5,7 @@ import { Badge } from "../ui/badge"
 import { Button } from "../ui/button"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { useRouter } from "next/navigation"
 
 export default function QuoteCardItem({
     quoteId,
@@ -28,9 +29,12 @@ export default function QuoteCardItem({
     isAcceptable?: boolean,
     canEdit?: boolean
 }) {
+    const router = useRouter()
 
     return <>
-        <Card>
+        <Card onClick={() => {
+            if (quoteId) router.push(`/dashboard/lawyer/quotes/${quoteId}`)
+        }}>
             <CardHeader>
                 <CardTitle className="flex justify-between">
                     {caseTitle}

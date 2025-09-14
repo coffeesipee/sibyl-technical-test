@@ -56,7 +56,7 @@ export default function QuotesPage() {
               caseCategory={item.case.category}
               status={item.status}
               quoteId={item.id}
-              canEdit={true}
+              canEdit={item.status === QuoteStatus.Enum.proposed}
             />)}
         </div>
       ) : <div>No quotes found</div>}

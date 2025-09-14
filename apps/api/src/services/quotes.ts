@@ -8,6 +8,9 @@ export interface QuotesServiceDeps {
       count: Function;
       findUnique: Function;
     };
+    case: {
+      findUnique: Function;
+    };
   };
   createCheckoutSession: (opts: { amount: number; quoteId: string; successUrl: string; cancelUrl: string }) => Promise<any>;
   getPagination: (page: number, pageSize: number) => { skip: number; take: number };
@@ -52,6 +55,11 @@ export class QuotesService {
       const isValid = (QuoteStatus.options as readonly string[]).includes(status);
       if (!isValid) return { notFound: true } as const;
       if (q.status !== status) return { notFound: true } as const;
+    }
+    if (q.status === 'accepted') {
+      const caseWithFiles = await this.deps.prisma.case.findUnique({ where: { id: q.caseId }, include: { files: true } });
+      const enriched = { ...q, case: { ...q.case, files: caseWithFiles?.files ?? [] } } as any;
+      return { ok: true as const, quote: enriched };
     }
     return { ok: true as const, quote: q };
   }

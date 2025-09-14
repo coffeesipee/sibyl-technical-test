@@ -58,7 +58,17 @@ export default function QuoteForm({ defaultValue, onSubmit }: Props) {
                     render={({ field }) => (
                         <FormItem>
                             <Label htmlFor="amount">Amount</Label>
-                            <Input id="amount" onChange={(e) => field.onChange(Number(e.target.value))} type="number" />
+                            <Input
+                                id="amount"
+                                type="number"
+                                value={field.value ?? ''}
+                                onChange={(e) => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+                                onBlur={field.onBlur}
+                                name={field.name}
+                                ref={field.ref}
+                                min={0}
+                                step={1}
+                            />
                             <FormMessage />
                         </FormItem>
                     )}
@@ -70,7 +80,17 @@ export default function QuoteForm({ defaultValue, onSubmit }: Props) {
                     render={({ field }) => (
                         <FormItem>
                             <Label htmlFor="expectedDays">Expected Days</Label>
-                            <Input id="expectedDays" onChange={(e) => field.onChange(Number(e.target.value))} type="number" />
+                            <Input
+                                id="expectedDays"
+                                type="number"
+                                value={field.value ?? ''}
+                                onChange={(e) => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+                                onBlur={field.onBlur}
+                                name={field.name}
+                                ref={field.ref}
+                                min={1}
+                                step={1}
+                            />
                             <FormMessage />
                         </FormItem>
                     )}
